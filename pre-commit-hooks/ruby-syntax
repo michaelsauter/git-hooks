@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Hook that checks Ruby syntax
+
+ruby_files=$(git status --short | grep -E '^(A|M)' | awk '{ print $2 }' | grep -E '\.rb$')
+exit_code=0
+
+for file in $ruby_files; do
+  ruby_out=$(ruby -c "$file" 2>&1)
+  if ! [ $? -eq 0 ]; then
+    exit_code=1
+    echo "$ruby_out"
+    echo
+  fi
+done
+
+exit $exit_code

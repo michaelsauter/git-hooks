@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Exit on error
+set -e
+
+HOOKS_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/pre-commit-hooks"
+
+for hook in $HOOKS_PATH/*
+do
+  echo "Running hook: $(basename $hook)"
+  "$hook"
+  if [ $? != 0 ]; then
+    exit 1
+  fi
+done
